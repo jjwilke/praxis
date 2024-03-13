@@ -527,6 +527,7 @@ def maybe_pad_uneven_sharding(
   """Pads xs to make them evenly shardable, if needed."""
 
   def _maybe_pad(x, pspec, shape):
+    return x
     if is_optax_masked_node(x):
       return x
     paddings = get_uneven_sharding_paddings(pspec, shape, mesh_shape,

@@ -2,6 +2,7 @@ import os
 
 from absl import logging
 
+
 from praxis import base_layer
 from praxis import pax_fiddle
 from praxis import pytypes
@@ -11,11 +12,13 @@ from praxis.layers import activations
 from praxis.layers import attentions, grouped_query_attention, multi_query_attention
 from praxis.layers import embedding_softmax
 from praxis.layers import normalizations
+
 from praxis.contrib.gpu.scripts_gpu.lora_layers import (
     LoraAttentionProjection,
     LoraCombinedQKVProjection,
     LoraLinear,
 )
+
 
 try:
     import transformer_engine.jax as te

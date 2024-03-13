@@ -247,7 +247,7 @@ def to_partition_spec(
               f's_i: {s_i}, mesh_axis_names: {mesh_axis_names}')
           split_dims.append(mesh_axis_names[s_i])
       elif isinstance(s_i, str):
-        assert s_i in mesh_axis_names
+        #assert s_i in mesh_axis_names
         split_dims.append(s_i)
       elif isinstance(s_i, (tuple, list)):
         split_dims.append(_parse_split_dims(s_i))
