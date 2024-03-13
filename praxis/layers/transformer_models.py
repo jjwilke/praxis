@@ -341,16 +341,14 @@ class TransformerLm(base_layer.BaseLayer):
         if training_optimized
         else [batch_axes, None, None]
     )
+
     egcm = (
         [data_axis, None, None, mdl_axis]
         if training_optimized
         else [batch_axes, None, None, None]
     )
 
-    if seq_axis is None:
-      w_data_axes = data_axis
-    else:
-      w_data_axes = (data_axis, seq_axis)
+    w_data_axes = data_axis
 
     # w_df: sharding for weight of ffn0, shape (d, f). ff1 weights will be
     # inferred from it.
