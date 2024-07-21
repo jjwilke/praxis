@@ -320,14 +320,22 @@ class FullSoftmax(base_layer.BaseLayer):
       )
       logits = log_probs = None
 
-    # Compute total softmax cross-entropy loss for the output tensor.
-    total_xent = jnp.sum(
+    per_batch_xent = jnp.sum(
         jnp.expand_dims(per_example_xent, axis=-1) * class_weights,
         dtype=jnp.float32,
+        axis=[-2,-1],
     )
-    total_weight = jnp.sum(class_weights, dtype=jnp.float32)
+    per_batch_weight = jnp.sum(
+        class_weights, axis=[-2,-1], dtype=jnp.float32
+    )
+
+    avg_batch_xent = per_batch_xent / per_batch_weight
+    avg_xent = jnp.sum(avg_batch_xent)
+    total_xent = jnp.sum(per_batch_xent)
+    total_weight = jnp.sum(per_batch_weight)
 
     if self.z_loss_weight > 0.0:
+      raise Exception("z_loss_weight not supported")
       assert logits is not None
       z_loss = (
           jnp.sum(_compute_z_loss(logits) * class_weights, dtype=jnp.float32)
@@ -348,7 +356,7 @@ class FullSoftmax(base_layer.BaseLayer):
         per_example_xent=per_example_xent.astype(jnp.float32),
         total_xent=total_xent,
         total_weight=total_weight,
-        avg_xent=(total_xent / (total_weight + 1e-6)).astype(jnp.float32),
+        avg_xent=avg_xent,
     )
     if class_ids is not None:
       output_nmap.accuracy = (

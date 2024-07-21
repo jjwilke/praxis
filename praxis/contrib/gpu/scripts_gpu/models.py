@@ -81,9 +81,9 @@ def compute_xent_loss_helper(
     )
   predicted_labels = predictions.per_example_argmax.astype(labels.dtype)
   num_preds = predictions.total_weight
-  mean_acc = jnp.sum((labels == predicted_labels) * weights) / jnp.maximum(
-      num_preds, 1
-  )
+  #mean_acc = jnp.sum((labels == predicted_labels) * weights) / jnp.maximum(
+  #    num_preds, 1
+  #)
   metric_weight = jnp.array(num_preds, predictions.avg_xent.dtype)
 
   if hasattr(predictions, 'avg_xent_weight'):
@@ -99,7 +99,7 @@ def compute_xent_loss_helper(
           jnp.array(1.0, predictions.aux_loss.dtype),
       ),
       log_pplx=(predictions.avg_xent, avg_xent_weight),
-      fraction_of_correct_next_step_preds=(mean_acc, metric_weight),
+      #fraction_of_correct_next_step_preds=(mean_acc, metric_weight),
       num_predictions=(num_preds, jnp.array(1.0, num_preds.dtype)),
   )
 
@@ -176,12 +176,12 @@ def compute_eval_metrics_helper(
     )
     num_nonpadding = jnp.sum(input_batch.eval_sample_weights)
 
-    mean_acc_strict = jnp.sum(
-        jnp.sum((labels == predicted_labels) * weights, axis=-1) == num_acc
-    ) / jnp.maximum(num_nonpadding, 1)
-    strict_weight = jnp.array(num_nonpadding, predictions.avg_xent.dtype)
-
-    metrics.acc_strict = (mean_acc_strict, strict_weight)
+    #mean_acc_strict = jnp.sum(
+    #    jnp.sum((labels == predicted_labels) * weights, axis=-1) == num_acc
+    #) / jnp.maximum(num_nonpadding, 1)
+    #strict_weight = jnp.array(num_nonpadding, predictions.avg_xent.dtype)
+    #
+    #metrics.acc_strict = (mean_acc_strict, strict_weight)
 
   elif eval_task == 'boolq':
 
